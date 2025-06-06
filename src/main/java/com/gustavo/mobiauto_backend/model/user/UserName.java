@@ -1,0 +1,13 @@
+package com.gustavo.mobiauto_backend.model.user;
+
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
+
+@AllArgsConstructor
+@Getter
+@Setter
+public class UserName {
+    private String firstName;
+    private String lastName;
+}
