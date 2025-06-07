@@ -1,12 +1,14 @@
 package com.gustavo.mobiauto_backend.model.vehicle;
 
+import jakarta.persistence.Embeddable;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+@Embeddable
 @AllArgsConstructor
-@Getter
-@Setter
+@NoArgsConstructor
 public class VehicleReleaseYear {
-    private int value;
+    private @Getter @Setter int value;
 }

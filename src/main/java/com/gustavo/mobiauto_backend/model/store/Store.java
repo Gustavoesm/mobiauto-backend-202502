@@ -1,21 +1,43 @@
 package com.gustavo.mobiauto_backend.model.store;
 
+import java.util.List;
+
 import com.gustavo.mobiauto_backend.model.offer.Offer;
 
+import jakarta.persistence.AttributeOverride;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Embedded;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import lombok.AllArgsConstructor;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@AllArgsConstructor
+@Entity
+@Table(name = "stores")
 @Getter
-@Setter
+@NoArgsConstructor
 public class Store {
-    private @Id int id;
-    private StoreName name;
-    private Offer[] offers;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
+    private Long id;
 
-    Store(String storeName) {
+    @Embedded
+    @Setter
+    @AttributeOverride(name = "value", column = @Column(name = "name"))
+    private StoreName name;
+
+    @OneToMany(mappedBy = "store", cascade = CascadeType.ALL)
+    private List<Offer> offers;
+
+    public Store(String storeName) {
         this.name = new StoreName(storeName);
+        this.offers = List.of();
     }
 }

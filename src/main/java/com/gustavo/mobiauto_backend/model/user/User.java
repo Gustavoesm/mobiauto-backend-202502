@@ -1,14 +1,52 @@
 package com.gustavo.mobiauto_backend.model.user;
 
+import jakarta.persistence.AttributeOverride;
+import jakarta.persistence.Column;
+import jakarta.persistence.Embedded;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import lombok.AllArgsConstructor;
+import jakarta.persistence.Table;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-@AllArgsConstructor
+@Entity
+@Table(name = "users")
+@NoArgsConstructor
 @Getter
+@Setter
 public class User {
-    private @Id int id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
+    private Long id;
+
+    @Embedded
     private UserName name;
+
+    @Embedded
+    @AttributeOverride(name = "value", column = @Column(name = "email"))
     private UserEmail email;
+
+    @Embedded
+    @AttributeOverride(name = "value", column = @Column(name = "password"))
     private UserPassword password;
+
+    public User(UserName name, UserEmail email, UserPassword password) {
+        this.name = name;
+        this.email = email;
+        this.password = password;
+    }
+
+    public User(String firstName, String lastName, String email, String password) {
+        this.name = new UserName(firstName, lastName);
+        this.email = new UserEmail(email);
+        this.password = new UserPassword(password);
+    }
+
+    public String getFullName() {
+        return name.getFirstName() + " " + name.getLastName();
+    }
 }

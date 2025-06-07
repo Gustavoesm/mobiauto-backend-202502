@@ -1,12 +1,14 @@
 package com.gustavo.mobiauto_backend.model.user;
 
+import jakarta.persistence.Embeddable;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+@Embeddable
 @AllArgsConstructor
-@Getter
-@Setter
+@NoArgsConstructor
 public class UserEmail {
-    private String value;
+    private @Getter @Setter String value;
 }
