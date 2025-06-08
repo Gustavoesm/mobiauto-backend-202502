@@ -1,7 +1,7 @@
 package com.gustavo.mobiauto_backend.controller.dto;
 
-import com.gustavo.mobiauto_backend.model.exceptions.DisabledUserException;
 import com.gustavo.mobiauto_backend.model.user.User;
+import com.gustavo.mobiauto_backend.service.exceptions.DeactivatedUserException;
 
 import lombok.Data;
 
@@ -17,7 +17,7 @@ public class UserDto {
 
     public static UserDto of(User user) {
         if (!user.isEnabled())
-            throw new DisabledUserException(user.getId());
+            throw new DeactivatedUserException(user.getId());
 
         return new UserDto(user.getFullName(), user.getEmail().getValue());
     }

@@ -7,7 +7,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @Getter
 @Setter
-public class RegisterStoreRequest {
+public class StoreRequest {
     private String storeName;
     private Long cnpj;
 }

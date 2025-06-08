@@ -3,14 +3,18 @@ package com.gustavo.mobiauto_backend.service;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import com.gustavo.mobiauto_backend.controller.dto.StoreDto;
-import com.gustavo.mobiauto_backend.controller.dto.StoreReportDto;
-import com.gustavo.mobiauto_backend.controller.requests.RegisterStoreRequest;
+import com.gustavo.mobiauto_backend.controller.requests.StoreRequest;
+import com.gustavo.mobiauto_backend.infra.exceptions.StoreNotFoundException;
 import com.gustavo.mobiauto_backend.infra.repositories.StoreRepository;
 import com.gustavo.mobiauto_backend.model.store.Store;
+import com.gustavo.mobiauto_backend.model.store.StoreName;
+import com.gustavo.mobiauto_backend.service.exceptions.StoreAlreadyActiveException;
+import com.gustavo.mobiauto_backend.service.exceptions.StoreAlreadyDeactivatedException;
 
 @Service
+@Transactional(readOnly = true)
 public class StoreService {
     private final StoreRepository storeRepository;
 
@@ -18,16 +22,60 @@ public class StoreService {
         this.storeRepository = storeRepository;
     }
 
-    public StoreDto registerStore(RegisterStoreRequest request) {
+    @Transactional
+    public Store registerStore(StoreRequest request) {
         Store store = new Store(request.getStoreName(), request.getCnpj());
-        store = storeRepository.save(store);
-        return StoreDto.of(store);
+        return storeRepository.save(store);
     }
 
-    public List<StoreReportDto> listAllStores() {
-        return storeRepository.findAll()
-                .stream()
-                .map(StoreReportDto::of)
+    public List<Store> listAllStores() {
+        return storeRepository.findAll();
+    }
+
+    public List<Store> listActiveStores() {
+        return storeRepository.findAll().stream()
+                .filter(Store::isEnabled)
                 .toList();
+    }
+
+    public Store getStore(Long id) {
+        return storeRepository.findById(id)
+                .orElseThrow(() -> new StoreNotFoundException(id));
+    }
+
+    @Transactional
+    public Store updateStore(Long id, StoreRequest request) {
+        Store store = this.getStore(id);
+
+        if (request.getStoreName() != null) {
+            store.setCompanyName(new StoreName(request.getStoreName()));
+        }
+
+        return storeRepository.save(store);
+    }
+
+    @Transactional
+    public Store deactivateStore(Long id) {
+        Store store = this.getStore(id);
+
+        if (!store.isEnabled()) {
+            throw new StoreAlreadyDeactivatedException(id);
+        }
+
+        store.setEnabled(false);
+        return storeRepository.save(store);
+    }
+
+    @Transactional
+    public Store reactivateStore(Long id) {
+        Store store = storeRepository.findById(id)
+                .orElseThrow(() -> new StoreNotFoundException(id));
+
+        if (store.isEnabled()) {
+            throw new StoreAlreadyActiveException(id);
+        }
+
+        store.setEnabled(true);
+        return storeRepository.save(store);
     }
 }

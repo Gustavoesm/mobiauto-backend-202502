@@ -1,4 +1,4 @@
-package com.gustavo.mobiauto_backend.model.exceptions;
+package com.gustavo.mobiauto_backend.infra.exceptions;
 
 public class StoreNotFoundException extends RuntimeException {
     public StoreNotFoundException(Long id) {

@@ -34,9 +34,12 @@ public class Store {
     private StoreName companyName;
 
     @Embedded
-    @Setter
-    @AttributeOverride(name = "value", column = @Column(name = "cnpj"))
+    @AttributeOverride(name = "value", column = @Column(name = "cnpj", unique = true))
     private Cnpj cnpj;
+
+    @Column(name = "enabled")
+    @Setter
+    private boolean enabled;
 
     @OneToMany(mappedBy = "store", cascade = CascadeType.ALL)
     private List<Offer> offers;
@@ -44,6 +47,7 @@ public class Store {
     public Store(String storeName, Long cnpj) {
         this.companyName = new StoreName(storeName);
         this.cnpj = new Cnpj(cnpj);
+        this.enabled = true;
         this.offers = List.of();
     }
 }

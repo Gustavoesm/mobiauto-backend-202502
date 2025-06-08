@@ -4,13 +4,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.gustavo.mobiauto_backend.controller.requests.UserRequest;
+import com.gustavo.mobiauto_backend.infra.exceptions.UserNotFoundException;
 import com.gustavo.mobiauto_backend.infra.repositories.UserRepository;
-import com.gustavo.mobiauto_backend.model.exceptions.UserAlreadyEnabledException;
-import com.gustavo.mobiauto_backend.model.exceptions.UserNotFoundException;
 import com.gustavo.mobiauto_backend.model.user.User;
 import com.gustavo.mobiauto_backend.model.user.UserEmail;
 import com.gustavo.mobiauto_backend.model.user.UserName;
 import com.gustavo.mobiauto_backend.model.user.UserPassword;
+import com.gustavo.mobiauto_backend.service.exceptions.UserAlreadyActiveException;
+import com.gustavo.mobiauto_backend.service.exceptions.UserAlreadyDeactivatedException;
 
 @Service
 @Transactional(readOnly = true)
@@ -64,6 +65,10 @@ public class UserService {
     public User deactivateUser(Long id) {
         User user = this.getUser(id);
 
+        if (!user.isEnabled()) {
+            throw new UserAlreadyDeactivatedException(id);
+        }
+
         user.setEnabled(false);
         user = userRepository.save(user);
         return user;
@@ -75,7 +80,7 @@ public class UserService {
                 .orElseThrow(() -> new UserNotFoundException(id));
 
         if (user.isEnabled()) {
-            throw new UserAlreadyEnabledException(id);
+            throw new UserAlreadyActiveException(id);
         }
 
         user.setEnabled(true);

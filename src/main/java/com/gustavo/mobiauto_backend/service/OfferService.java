@@ -4,12 +4,12 @@ import org.springframework.stereotype.Service;
 
 import com.gustavo.mobiauto_backend.controller.dto.OfferDto;
 import com.gustavo.mobiauto_backend.controller.requests.RegisterOfferRequest;
+import com.gustavo.mobiauto_backend.infra.exceptions.StoreNotFoundException;
+import com.gustavo.mobiauto_backend.infra.exceptions.UserNotFoundException;
 import com.gustavo.mobiauto_backend.infra.repositories.OfferRepository;
 import com.gustavo.mobiauto_backend.infra.repositories.StoreRepository;
 import com.gustavo.mobiauto_backend.infra.repositories.UserRepository;
 import com.gustavo.mobiauto_backend.infra.repositories.VehicleRepository;
-import com.gustavo.mobiauto_backend.model.exceptions.StoreNotFoundException;
-import com.gustavo.mobiauto_backend.model.exceptions.UserNotFoundException;
 import com.gustavo.mobiauto_backend.model.offer.Offer;
 import com.gustavo.mobiauto_backend.model.store.Store;
 import com.gustavo.mobiauto_backend.model.user.User;
