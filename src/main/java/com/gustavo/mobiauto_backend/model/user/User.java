@@ -34,16 +34,28 @@ public class User {
     @AttributeOverride(name = "value", column = @Column(name = "password"))
     private UserPassword password;
 
+    @Column(name = "enabled")
+    private boolean enabled;
+
     public User(UserName name, UserEmail email, UserPassword password) {
         this.name = name;
         this.email = email;
         this.password = password;
+        this.enabled = true;
+    }
+
+    public User(UserName name, UserEmail email, UserPassword password, boolean enabled) {
+        this.name = name;
+        this.email = email;
+        this.password = password;
+        this.enabled = enabled;
     }
 
     public User(String firstName, String lastName, String email, String password) {
         this.name = new UserName(firstName, lastName);
         this.email = new UserEmail(email);
         this.password = new UserPassword(password);
+        this.enabled = true;
     }
 
     public String getFullName() {
