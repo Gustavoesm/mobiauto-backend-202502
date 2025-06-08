@@ -1,6 +1,7 @@
 package com.gustavo.mobiauto_backend.service;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.gustavo.mobiauto_backend.controller.requests.UserRequest;
 import com.gustavo.mobiauto_backend.infra.repositories.UserRepository;
@@ -12,6 +13,7 @@ import com.gustavo.mobiauto_backend.model.user.UserName;
 import com.gustavo.mobiauto_backend.model.user.UserPassword;
 
 @Service
+@Transactional(readOnly = true)
 public class UserService {
     private final UserRepository userRepository;
 
@@ -19,6 +21,7 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
+    @Transactional
     public User registerUser(UserRequest request) {
         User user = new User(
                 request.getFirstName(),
@@ -34,6 +37,7 @@ public class UserService {
                 .orElseThrow(() -> new UserNotFoundException(id));
     }
 
+    @Transactional
     public User updateUser(Long id, UserRequest request) {
         User user = this.getUser(id);
 
@@ -56,6 +60,7 @@ public class UserService {
         return user;
     }
 
+    @Transactional
     public User deactivateUser(Long id) {
         User user = this.getUser(id);
 
@@ -64,6 +69,7 @@ public class UserService {
         return user;
     }
 
+    @Transactional
     public User reactivateUser(Long id) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new UserNotFoundException(id));
