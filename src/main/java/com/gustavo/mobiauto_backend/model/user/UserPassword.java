@@ -1,16 +1,23 @@
 package com.gustavo.mobiauto_backend.model.user;
 
 import jakarta.persistence.Embeddable;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @Embeddable
-@AllArgsConstructor
 @NoArgsConstructor
 @Getter
-@Setter
 public class UserPassword {
     private String value;
+
+    public UserPassword(String value) {
+        setValue(value);
+    }
+
+    public void setValue(String value) {
+        if (value == null || value.length() < 4) {
+            throw new IllegalArgumentException("Password should be at least 4 characters long.");
+        }
+        this.value = value;
+    }
 }

@@ -31,13 +31,19 @@ public class Store {
     @Embedded
     @Setter
     @AttributeOverride(name = "value", column = @Column(name = "name"))
-    private StoreName name;
+    private StoreName companyName;
+
+    @Embedded
+    @Setter
+    @AttributeOverride(name = "value", column = @Column(name = "cnpj"))
+    private Cnpj cnpj;
 
     @OneToMany(mappedBy = "store", cascade = CascadeType.ALL)
     private List<Offer> offers;
 
-    public Store(String storeName) {
-        this.name = new StoreName(storeName);
+    public Store(String storeName, Long cnpj) {
+        this.companyName = new StoreName(storeName);
+        this.cnpj = new Cnpj(cnpj);
         this.offers = List.of();
     }
 }

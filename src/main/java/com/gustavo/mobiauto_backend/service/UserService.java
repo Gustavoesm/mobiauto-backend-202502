@@ -4,7 +4,7 @@ import org.springframework.stereotype.Service;
 
 import com.gustavo.mobiauto_backend.controller.dto.UserDto;
 import com.gustavo.mobiauto_backend.controller.requests.RegisterUserRequest;
-import com.gustavo.mobiauto_backend.model.repositories.UserRepository;
+import com.gustavo.mobiauto_backend.infra.repositories.UserRepository;
 import com.gustavo.mobiauto_backend.model.user.User;
 
 @Service

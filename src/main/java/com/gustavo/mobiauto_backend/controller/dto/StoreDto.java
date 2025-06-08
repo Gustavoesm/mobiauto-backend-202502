@@ -15,6 +15,6 @@ public class StoreDto {
     }
 
     public static StoreDto of(Store store) {
-        return new StoreDto(store.getId(), store.getName().getValue());
+        return new StoreDto(store.getId(), store.getCompanyName().getValue());
     }
 }
