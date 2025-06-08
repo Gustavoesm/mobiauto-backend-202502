@@ -7,8 +7,8 @@ import lombok.Getter;
 @Getter
 public enum OfferStatus {
     NEW("nova"),
-    IN_PROGRESS("em progresso"),
+    ATTENDED("em atendimento"),
     COMPLETED("concluida");
 
-    private final String value;
+    private final String description;
 }

@@ -65,11 +65,11 @@ public class UserService {
     public User deactivateUser(Long id) {
         User user = this.getUser(id);
 
-        if (!user.isEnabled()) {
+        if (!user.isActive()) {
             throw new UserAlreadyDeactivatedException(id);
         }
 
-        user.setEnabled(false);
+        user.setActive(false);
         user = userRepository.save(user);
         return user;
     }
@@ -79,11 +79,11 @@ public class UserService {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new UserNotFoundException(id));
 
-        if (user.isEnabled()) {
+        if (user.isActive()) {
             throw new UserAlreadyActiveException(id);
         }
 
-        user.setEnabled(true);
+        user.setActive(true);
         user = userRepository.save(user);
         return user;
     }

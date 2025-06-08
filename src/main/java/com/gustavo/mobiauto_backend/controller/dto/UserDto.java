@@ -16,7 +16,7 @@ public class UserDto {
     }
 
     public static UserDto of(User user) {
-        if (!user.isEnabled())
+        if (!user.isActive())
             throw new DeactivatedUserException(user.getId());
 
         return new UserDto(user.getFullName(), user.getEmail().getValue());

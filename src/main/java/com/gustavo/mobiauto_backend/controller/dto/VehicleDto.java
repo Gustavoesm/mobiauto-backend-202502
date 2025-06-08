@@ -4,14 +4,12 @@ import lombok.Data;
 
 @Data
 public class VehicleDto {
-    private Long id;
     private String model;
     private String color;
     private Integer releaseYear;
     private String type;
 
-    private VehicleDto(Long id, String model, String color, Integer releaseYear, String type) {
-        this.id = id;
+    private VehicleDto(String model, String color, Integer releaseYear, String type) {
         this.model = model;
         this.color = color;
         this.releaseYear = releaseYear;
@@ -20,7 +18,6 @@ public class VehicleDto {
 
     public static VehicleDto of(com.gustavo.mobiauto_backend.model.vehicle.Vehicle vehicle) {
         return new VehicleDto(
-                vehicle.getId(),
                 vehicle.getModel().getValue(),
                 vehicle.getColor().getValue(),
                 vehicle.getReleaseYear().getValue(),

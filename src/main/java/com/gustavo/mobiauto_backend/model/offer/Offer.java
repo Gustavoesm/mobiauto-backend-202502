@@ -34,6 +34,9 @@ public class Offer {
     @Column(name = "status", nullable = false)
     private OfferStatus status;
 
+    @Column(name = "active")
+    private boolean active;
+
     @ManyToOne
     @JoinColumn(name = "client_id", nullable = false)
     private User client;
@@ -51,6 +54,7 @@ public class Offer {
         this.client = client;
         this.vehicle = vehicle;
         this.store = store;
+        this.active = true;
     }
 
     public Offer(User client, Vehicle vehicle, Store store) {
@@ -58,5 +62,6 @@ public class Offer {
         this.client = client;
         this.vehicle = vehicle;
         this.store = store;
+        this.active = true;
     }
 }

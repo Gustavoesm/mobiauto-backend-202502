@@ -38,8 +38,9 @@ public class UserController {
     }
 
     @DeleteMapping("/users/{id}")
-    public ResponseEntity<UserDto> deactivateUser(@PathVariable Long id) {
-        return new ResponseEntity<>(UserDto.of(userService.deactivateUser(id)), HttpStatus.OK);
+    public ResponseEntity<Void> deactivateUser(@PathVariable Long id) {
+        userService.deactivateUser(id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @PatchMapping("/users/{id}/reactivate")

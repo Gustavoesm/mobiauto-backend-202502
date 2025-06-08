@@ -34,7 +34,7 @@ public class StoreService {
 
     public List<Store> listActiveStores() {
         return storeRepository.findAll().stream()
-                .filter(Store::isEnabled)
+                .filter(Store::isActive)
                 .toList();
     }
 
@@ -58,11 +58,11 @@ public class StoreService {
     public Store deactivateStore(Long id) {
         Store store = this.getStore(id);
 
-        if (!store.isEnabled()) {
+        if (!store.isActive()) {
             throw new StoreAlreadyDeactivatedException(id);
         }
 
-        store.setEnabled(false);
+        store.setActive(false);
         return storeRepository.save(store);
     }
 
@@ -71,11 +71,11 @@ public class StoreService {
         Store store = storeRepository.findById(id)
                 .orElseThrow(() -> new StoreNotFoundException(id));
 
-        if (store.isEnabled()) {
+        if (store.isActive()) {
             throw new StoreAlreadyActiveException(id);
         }
 
-        store.setEnabled(true);
+        store.setActive(true);
         return storeRepository.save(store);
     }
 }

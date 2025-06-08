@@ -48,8 +48,9 @@ public class StoreController {
     }
 
     @DeleteMapping("/stores/{id}")
-    public ResponseEntity<StoreDto> deactivateStore(@PathVariable Long id) {
-        return new ResponseEntity<>(StoreDto.of(storeService.deactivateStore(id)), HttpStatus.OK);
+    public ResponseEntity<Void> deactivateStore(@PathVariable Long id) {
+        storeService.deactivateStore(id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @PatchMapping("/stores/{id}/reactivate")

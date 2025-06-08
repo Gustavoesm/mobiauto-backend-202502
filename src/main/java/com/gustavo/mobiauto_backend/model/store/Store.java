@@ -37,9 +37,9 @@ public class Store {
     @AttributeOverride(name = "value", column = @Column(name = "cnpj", unique = true))
     private Cnpj cnpj;
 
-    @Column(name = "enabled")
+    @Column(name = "active")
     @Setter
-    private boolean enabled;
+    private boolean active;
 
     @OneToMany(mappedBy = "store", cascade = CascadeType.ALL)
     private List<Offer> offers;
@@ -47,7 +47,7 @@ public class Store {
     public Store(String storeName, Long cnpj) {
         this.companyName = new StoreName(storeName);
         this.cnpj = new Cnpj(cnpj);
-        this.enabled = true;
+        this.active = true;
         this.offers = List.of();
     }
 }

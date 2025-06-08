@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.gustavo.mobiauto_backend.infra.config.Formatters;
+import com.gustavo.mobiauto_backend.model.offer.Offer;
 import com.gustavo.mobiauto_backend.model.store.Store;
 import com.gustavo.mobiauto_backend.service.exceptions.DeactivatedStoreException;
 
@@ -25,10 +26,11 @@ public class StoreDto {
     }
 
     public static StoreDto of(Store store) {
-        if (!store.isEnabled())
+        if (!store.isActive())
             throw new DeactivatedStoreException(store.getId());
 
         List<OfferDto> offers = store.getOffers() != null ? store.getOffers().stream()
+                .filter(Offer::isActive)
                 .map(OfferDto::of)
                 .toList() : List.of();
         return new StoreDto(
