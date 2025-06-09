@@ -12,6 +12,7 @@ import com.gustavo.mobiauto_backend.model.user.User;
 import com.gustavo.mobiauto_backend.model.vehicle.Vehicle;
 import com.gustavo.mobiauto_backend.service.exceptions.AlreadyActiveException;
 import com.gustavo.mobiauto_backend.service.exceptions.AlreadyDeactivatedException;
+import com.gustavo.mobiauto_backend.service.exceptions.DeactivatedOfferException;
 
 @Service
 @Transactional(readOnly = true)
@@ -56,6 +57,21 @@ public class OfferService {
                 }
 
                 offer.setActive(false);
+                offer = offerRepository.save(offer);
+                return offer;
+        }
+
+        @Transactional
+        public Offer updateOffer(Long id, VehicleRequest request) {
+                Offer offer = this.getOffer(id);
+
+                if (!offer.isActive()) {
+                        throw new DeactivatedOfferException(id);
+                }
+
+                Vehicle updatedVehicle = vehicleService.updateVehicle(offer.getVehicle().getId(), request);
+                offer.setVehicle(updatedVehicle);
+
                 offer = offerRepository.save(offer);
                 return offer;
         }

@@ -38,10 +38,6 @@ public class StoreService {
         return storeRepository.save(store);
     }
 
-    public List<Store> listAllStores() {
-        return storeRepository.findAll();
-    }
-
     public List<Store> listActiveStores() {
         return storeRepository.findAll().stream()
                 .filter(Store::isActive)

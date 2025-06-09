@@ -37,6 +37,13 @@ public class OfferController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
+    @PatchMapping("/offers/{id}")
+    public ResponseEntity<OfferDto> updateOffer(@PathVariable Long id, @RequestBody VehicleRequest request) {
+        return new ResponseEntity<>(
+                OfferDto.of(offersService.updateOffer(id, request)),
+                HttpStatus.OK);
+    }
+
     @PatchMapping("/offers/{id}/reactivate")
     public ResponseEntity<OfferDto> reactivateOffer(@PathVariable Long id) {
         return new ResponseEntity<>(
