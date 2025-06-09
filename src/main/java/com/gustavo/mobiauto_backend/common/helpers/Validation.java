@@ -7,13 +7,27 @@ public final class Validation {
     private Validation() {
     }
 
-    public static boolean isValidCNPJ(Long cnpj) {
-        if (cnpj == null || cnpj < 0) {
+    public static boolean isValidCNPJ(String cnpj) {
+        if (cnpj == null || cnpj.trim().isEmpty()) {
             return false;
         }
 
-        String cnpjStr = String.format("%014d", cnpj);
+        String cleanCnpj = cnpj.replaceAll("[./-]", "");
+
+        if (!cleanCnpj.matches("\\d+")) {
+            return false;
+        }
+
+        if (cleanCnpj.length() > 14) {
+            return false;
+        }
+
+        String cnpjStr = String.format("%014d", Long.parseLong(cleanCnpj));
         if (cnpjStr.length() != 14) {
+            return false;
+        }
+
+        if (cnpjStr.matches("(\\d)\\1{13}")) {
             return false;
         }
 

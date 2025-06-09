@@ -4,8 +4,15 @@ public class Formatters {
     private Formatters() {
     }
 
-    public static String formatCnpj(Long cnpj) {
-        String cnpjStr = String.format("%014d", cnpj);
+    public static String formatCnpj(String cnpj) {
+        if (cnpj == null) {
+            return null;
+        }
+
+        String cleanCnpj = cnpj.replaceAll("[./-]", "");
+
+        String cnpjStr = String.format("%014d", Long.parseLong(cleanCnpj));
+
         return String.format("%s.%s.%s/%s-%s",
                 cnpjStr.substring(0, 2),
                 cnpjStr.substring(2, 5),

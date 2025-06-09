@@ -44,7 +44,7 @@ public class Store {
     @OneToMany(mappedBy = "store", cascade = CascadeType.ALL)
     private List<Offer> offers;
 
-    public Store(String storeName, Long cnpj) {
+    public Store(String storeName, String cnpj) {
         this.companyName = new StoreName(storeName);
         this.cnpj = new Cnpj(cnpj);
         this.active = true;

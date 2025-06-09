@@ -9,13 +9,13 @@ import lombok.NoArgsConstructor;
 @Embeddable
 @NoArgsConstructor
 public class Cnpj {
-    private @Getter Long value;
+    private @Getter String value;
 
-    public Cnpj(Long value) {
+    public Cnpj(String value) {
         setValue(value);
     }
 
-    public void setValue(Long value) {
+    public void setValue(String value) {
         if (!Validation.isValidCNPJ(value)) {
             throw new IllegalArgumentException("Please inform a valid CNPJ.");
         }

@@ -13,5 +13,5 @@ import com.gustavo.mobiauto_backend.model.store.Store;
 public interface StoreRepository extends JpaRepository<Store, Long> {
 
     @Query("SELECT s FROM Store s WHERE s.cnpj.value = :cnpj")
-    Optional<Store> findByCnpj(@Param("cnpj") Long cnpj);
+    Optional<Store> findByCnpj(@Param("cnpj") String cnpj);
 }

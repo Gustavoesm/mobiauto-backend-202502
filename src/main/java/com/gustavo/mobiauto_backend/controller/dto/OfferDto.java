@@ -15,7 +15,7 @@ public class OfferDto {
     private String storeCnpj;
     private String storeName;
 
-    private OfferDto(OfferStatus status, UserDto client, VehicleDto vehicle, Long storeCnpj, String storeName) {
+    private OfferDto(OfferStatus status, UserDto client, VehicleDto vehicle, String storeCnpj, String storeName) {
         this.status = status;
         this.client = client;
         this.vehicle = vehicle;

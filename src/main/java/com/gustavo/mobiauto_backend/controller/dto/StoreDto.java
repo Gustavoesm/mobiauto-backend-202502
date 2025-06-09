@@ -18,7 +18,7 @@ public class StoreDto {
     private long totalOffers;
     private List<OfferDto> offers;
 
-    private StoreDto(String name, long cnpj, long offerCount, List<OfferDto> offers) {
+    private StoreDto(String name, String cnpj, long offerCount, List<OfferDto> offers) {
         this.name = name;
         this.cnpj = Formatters.formatCnpj(cnpj);
         this.totalOffers = offerCount;
@@ -29,10 +29,10 @@ public class StoreDto {
         if (!store.isActive())
             throw new DeactivatedStoreException(store.getId());
 
-        List<OfferDto> offers = store.getOffers() != null ? store.getOffers().stream()
+        List<OfferDto> offers = store.getOffers().stream()
                 .filter(Offer::isActive)
                 .map(OfferDto::of)
-                .toList() : List.of();
+                .toList();
         return new StoreDto(
                 store.getCompanyName().getValue(),
                 store.getCnpj().getValue(),

@@ -9,5 +9,5 @@ import lombok.Setter;
 @Setter
 public class StoreRequest {
     private String storeName;
-    private Long cnpj;
+    private String cnpj;
 }

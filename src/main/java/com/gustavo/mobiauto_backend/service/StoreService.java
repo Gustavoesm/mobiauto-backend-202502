@@ -31,7 +31,7 @@ public class StoreService {
     @Transactional
     public Store registerStore(StoreRequest request) {
         if (storeRepository.findByCnpj(request.getCnpj()).isPresent()) {
-            throw new DuplicateException(Cnpj.class, String.valueOf(request.getCnpj()));
+            throw new DuplicateException(Cnpj.class, request.getCnpj());
         }
 
         Store store = new Store(request.getStoreName(), request.getCnpj());
