@@ -1,4 +1,4 @@
-package com.gustavo.mobiauto_backend.infra.config;
+package com.gustavo.mobiauto_backend.common.helpers;
 
 public final class Validation {
 

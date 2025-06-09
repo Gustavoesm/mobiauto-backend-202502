@@ -1,5 +1,7 @@
 package com.gustavo.mobiauto_backend.model.user;
 
+import com.gustavo.mobiauto_backend.common.helpers.CryptoUtils;
+
 import jakarta.persistence.Embeddable;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -18,6 +20,6 @@ public class UserPassword {
         if (value == null || value.length() < 4) {
             throw new IllegalArgumentException("Password should be at least 4 characters long.");
         }
-        this.value = value;
+        this.value = CryptoUtils.encryptPassword(value);
     }
 }

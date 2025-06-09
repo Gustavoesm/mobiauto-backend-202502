@@ -1,6 +1,6 @@
 package com.gustavo.mobiauto_backend.model.user;
 
-import com.gustavo.mobiauto_backend.infra.config.Validation;
+import com.gustavo.mobiauto_backend.common.helpers.Validation;
 
 import jakarta.persistence.Embeddable;
 import lombok.Getter;

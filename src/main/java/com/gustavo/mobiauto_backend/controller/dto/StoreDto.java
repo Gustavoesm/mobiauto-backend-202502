@@ -3,7 +3,7 @@ package com.gustavo.mobiauto_backend.controller.dto;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import com.gustavo.mobiauto_backend.infra.config.Formatters;
+import com.gustavo.mobiauto_backend.common.helpers.Formatters;
 import com.gustavo.mobiauto_backend.model.offer.Offer;
 import com.gustavo.mobiauto_backend.model.store.Store;
 import com.gustavo.mobiauto_backend.service.exceptions.DeactivatedStoreException;

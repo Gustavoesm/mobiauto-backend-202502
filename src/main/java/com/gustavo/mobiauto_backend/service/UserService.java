@@ -33,14 +33,19 @@ public class UserService {
         return user;
     }
 
-    public User getUser(Long id) {
+    public User findUser(Long id) {
         return userRepository.findById(id)
                 .orElseThrow(() -> new UserNotFoundException(id));
     }
 
+    public User findByEmail(String email) {
+        return userRepository.findByEmail(email)
+                .orElseThrow(() -> new UserNotFoundException("User with email " + email + " not found."));
+    }
+
     @Transactional
     public User updateUser(Long id, UserRequest request) {
-        User user = this.getUser(id);
+        User user = this.findUser(id);
 
         if (request.getFirstName() != null || request.getLastName() != null) {
             UserName name = user.getName();
@@ -63,7 +68,7 @@ public class UserService {
 
     @Transactional
     public User deactivateUser(Long id) {
-        User user = this.getUser(id);
+        User user = this.findUser(id);
 
         if (!user.isActive()) {
             throw new UserAlreadyDeactivatedException(id);

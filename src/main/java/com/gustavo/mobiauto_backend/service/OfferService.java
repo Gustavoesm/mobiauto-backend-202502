@@ -32,7 +32,7 @@ public class OfferService {
         @Transactional
         public Offer registerOffer(Long storeId, Long userId, VehicleRequest request) {
                 Store store = storeService.getStore(storeId);
-                User client = userService.getUser(userId);
+                User client = userService.findUser(userId);
 
                 Vehicle vehicle = vehicleService.createVehicle(request);
 
