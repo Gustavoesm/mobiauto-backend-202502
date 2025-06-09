@@ -1,14 +1,22 @@
 package com.gustavo.mobiauto_backend.model.vehicle;
 
 import jakarta.persistence.Embeddable;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @Embeddable
-@AllArgsConstructor
 @NoArgsConstructor
 public class VehicleModel {
-    private @Getter @Setter String value;
+    private @Getter String value;
+
+    public VehicleModel(String value) {
+        setValue(value);
+    }
+
+    public void setValue(String value) {
+        if (value == null || value.trim().isEmpty()) {
+            throw new IllegalArgumentException("Vehicle model cannot be null or empty");
+        }
+        this.value = value.trim();
+    }
 }

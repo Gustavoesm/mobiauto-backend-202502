@@ -10,17 +10,13 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @Entity
 @Table(name = "vehicles")
-@AllArgsConstructor
 @NoArgsConstructor
 @Getter
-@Setter
 public class Vehicle {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,25 +24,65 @@ public class Vehicle {
     private Long id;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "type")
+    @Column(name = "type", nullable = false)
     private VehicleType type;
 
     @Embedded
-    @AttributeOverride(name = "value", column = @Column(name = "model"))
+    @AttributeOverride(name = "value", column = @Column(name = "model", nullable = false))
     private VehicleModel model;
 
     @Embedded
-    @AttributeOverride(name = "value", column = @Column(name = "release_year"))
+    @AttributeOverride(name = "value", column = @Column(name = "release_year", nullable = false))
     private VehicleReleaseYear releaseYear;
 
     @Embedded
-    @AttributeOverride(name = "value", column = @Column(name = "color"))
+    @AttributeOverride(name = "value", column = @Column(name = "color", nullable = false))
     private VehicleColor color;
 
     public Vehicle(VehicleType type, VehicleModel model, VehicleReleaseYear releaseYear, VehicleColor color) {
+        setType(type);
+        setModel(model);
+        setReleaseYear(releaseYear);
+        setColor(color);
+    }
+
+    public Vehicle(Long id, VehicleType type, VehicleModel model, VehicleReleaseYear releaseYear, VehicleColor color) {
+        this.id = id;
+        setType(type);
+        setModel(model);
+        setReleaseYear(releaseYear);
+        setColor(color);
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setType(VehicleType type) {
+        if (type == null) {
+            throw new IllegalArgumentException("Vehicle type cannot be null");
+        }
         this.type = type;
+    }
+
+    public void setModel(VehicleModel model) {
+        if (model == null) {
+            throw new IllegalArgumentException("Vehicle model cannot be null");
+        }
         this.model = model;
+    }
+
+    public void setReleaseYear(VehicleReleaseYear releaseYear) {
+        if (releaseYear == null) {
+            throw new IllegalArgumentException("Vehicle release year cannot be null");
+        }
         this.releaseYear = releaseYear;
+    }
+
+    public void setColor(VehicleColor color) {
+        if (color == null) {
+            throw new IllegalArgumentException("Vehicle color cannot be null");
+        }
         this.color = color;
     }
 }
