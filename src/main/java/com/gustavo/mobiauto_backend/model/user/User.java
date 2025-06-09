@@ -75,7 +75,7 @@ public class User implements UserDetails {
 
     @Override
     public String getPassword() {
-        return this.password.getValue();
+        return this.password != null ? this.password.getValue() : null;
     }
 
     @Override

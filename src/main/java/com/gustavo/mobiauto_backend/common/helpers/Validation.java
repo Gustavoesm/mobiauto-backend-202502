@@ -2,7 +2,7 @@ package com.gustavo.mobiauto_backend.common.helpers;
 
 public final class Validation {
 
-    public static final String EMAIL_REGEX = "^[\\w+.]+@\\w+\\.\\w{2,}(?:\\.\\w{2})?$";
+    public static final String EMAIL_REGEX = "^[\\w+.-]+@[\\w.-]+\\.[a-zA-Z]{2,}$";
 
     private Validation() {
     }

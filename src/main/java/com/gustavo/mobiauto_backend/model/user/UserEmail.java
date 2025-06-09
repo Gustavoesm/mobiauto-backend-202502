@@ -16,9 +16,15 @@ public class UserEmail {
     }
 
     public void setValue(String value) {
-        if (value == null || value.trim().isEmpty() || !value.matches(Validation.EMAIL_REGEX)) {
+        if (value == null || value.trim().isEmpty()) {
             throw new IllegalArgumentException("Invalid email format");
         }
-        this.value = value.trim().toLowerCase();
+
+        String trimmedValue = value.trim();
+        if (!trimmedValue.matches(Validation.EMAIL_REGEX)) {
+            throw new IllegalArgumentException("Invalid email format");
+        }
+
+        this.value = trimmedValue.toLowerCase();
     }
 }
