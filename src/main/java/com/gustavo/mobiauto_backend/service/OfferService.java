@@ -10,8 +10,8 @@ import com.gustavo.mobiauto_backend.model.offer.Offer;
 import com.gustavo.mobiauto_backend.model.store.Store;
 import com.gustavo.mobiauto_backend.model.user.User;
 import com.gustavo.mobiauto_backend.model.vehicle.Vehicle;
-import com.gustavo.mobiauto_backend.service.exceptions.OfferAlreadyActiveException;
-import com.gustavo.mobiauto_backend.service.exceptions.OfferAlreadyDeactivatedException;
+import com.gustavo.mobiauto_backend.service.exceptions.AlreadyActiveException;
+import com.gustavo.mobiauto_backend.service.exceptions.AlreadyDeactivatedException;
 
 @Service
 @Transactional(readOnly = true)
@@ -52,7 +52,7 @@ public class OfferService {
                 Offer offer = this.getOffer(id);
 
                 if (!offer.isActive()) {
-                        throw new OfferAlreadyDeactivatedException(id);
+                        throw new AlreadyDeactivatedException(Offer.class, id);
                 }
 
                 offer.setActive(false);
@@ -66,7 +66,7 @@ public class OfferService {
                                 .orElseThrow(() -> new OfferNotFoundException(id));
 
                 if (offer.isActive()) {
-                        throw new OfferAlreadyActiveException(id);
+                        throw new AlreadyActiveException(Offer.class, id);
                 }
 
                 offer.setActive(true);

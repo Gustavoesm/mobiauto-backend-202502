@@ -7,23 +7,33 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.gustavo.mobiauto_backend.controller.requests.StoreRequest;
 import com.gustavo.mobiauto_backend.infra.exceptions.StoreNotFoundException;
+import com.gustavo.mobiauto_backend.infra.repositories.OfferRepository;
 import com.gustavo.mobiauto_backend.infra.repositories.StoreRepository;
+import com.gustavo.mobiauto_backend.model.store.Cnpj;
 import com.gustavo.mobiauto_backend.model.store.Store;
 import com.gustavo.mobiauto_backend.model.store.StoreName;
-import com.gustavo.mobiauto_backend.service.exceptions.StoreAlreadyActiveException;
-import com.gustavo.mobiauto_backend.service.exceptions.StoreAlreadyDeactivatedException;
+import com.gustavo.mobiauto_backend.service.exceptions.AlreadyActiveException;
+import com.gustavo.mobiauto_backend.service.exceptions.AlreadyDeactivatedException;
+import com.gustavo.mobiauto_backend.service.exceptions.DuplicateException;
+import com.gustavo.mobiauto_backend.service.exceptions.EntityInUseException;
 
 @Service
 @Transactional(readOnly = true)
 public class StoreService {
     private final StoreRepository storeRepository;
+    private final OfferRepository offerRepository;
 
-    public StoreService(StoreRepository storeRepository) {
+    public StoreService(StoreRepository storeRepository, OfferRepository offerRepository) {
         this.storeRepository = storeRepository;
+        this.offerRepository = offerRepository;
     }
 
     @Transactional
     public Store registerStore(StoreRequest request) {
+        if (storeRepository.findByCnpj(request.getCnpj()).isPresent()) {
+            throw new DuplicateException(Cnpj.class, String.valueOf(request.getCnpj()));
+        }
+
         Store store = new Store(request.getStoreName(), request.getCnpj());
         return storeRepository.save(store);
     }
@@ -59,7 +69,14 @@ public class StoreService {
         Store store = this.getStore(id);
 
         if (!store.isActive()) {
-            throw new StoreAlreadyDeactivatedException(id);
+            throw new AlreadyDeactivatedException(Store.class, id);
+        }
+
+        boolean hasActiveOffers = offerRepository.findAll().stream()
+                .anyMatch(offer -> offer.getStore().getId().equals(id) && offer.isActive());
+
+        if (hasActiveOffers) {
+            throw new EntityInUseException(Store.class, id);
         }
 
         store.setActive(false);
@@ -72,7 +89,7 @@ public class StoreService {
                 .orElseThrow(() -> new StoreNotFoundException(id));
 
         if (store.isActive()) {
-            throw new StoreAlreadyActiveException(id);
+            throw new AlreadyActiveException(Store.class, id);
         }
 
         store.setActive(true);

@@ -5,25 +5,34 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.gustavo.mobiauto_backend.controller.requests.UserRequest;
 import com.gustavo.mobiauto_backend.infra.exceptions.UserNotFoundException;
+import com.gustavo.mobiauto_backend.infra.repositories.OfferRepository;
 import com.gustavo.mobiauto_backend.infra.repositories.UserRepository;
 import com.gustavo.mobiauto_backend.model.user.User;
 import com.gustavo.mobiauto_backend.model.user.UserEmail;
 import com.gustavo.mobiauto_backend.model.user.UserName;
 import com.gustavo.mobiauto_backend.model.user.UserPassword;
-import com.gustavo.mobiauto_backend.service.exceptions.UserAlreadyActiveException;
-import com.gustavo.mobiauto_backend.service.exceptions.UserAlreadyDeactivatedException;
+import com.gustavo.mobiauto_backend.service.exceptions.AlreadyActiveException;
+import com.gustavo.mobiauto_backend.service.exceptions.AlreadyDeactivatedException;
+import com.gustavo.mobiauto_backend.service.exceptions.DuplicateException;
+import com.gustavo.mobiauto_backend.service.exceptions.EntityInUseException;
 
 @Service
 @Transactional(readOnly = true)
 public class UserService {
     private final UserRepository userRepository;
+    private final OfferRepository offerRepository;
 
-    public UserService(UserRepository userRepository) {
+    public UserService(UserRepository userRepository, OfferRepository offerRepository) {
         this.userRepository = userRepository;
+        this.offerRepository = offerRepository;
     }
 
     @Transactional
     public User registerUser(UserRequest request) {
+        if (userRepository.findByEmail(request.getEmail()).isPresent()) {
+            throw new DuplicateException(UserEmail.class, request.getEmail());
+        }
+
         User user = new User(
                 request.getFirstName(),
                 request.getLastName(),
@@ -55,6 +64,11 @@ public class UserService {
         }
 
         if (request.getEmail() != null) {
+            userRepository.findByEmail(request.getEmail()).ifPresent(existingUser -> {
+                if (!existingUser.getId().equals(id)) {
+                    throw new DuplicateException(UserEmail.class, request.getEmail());
+                }
+            });
             user.setEmail(new UserEmail(request.getEmail()));
         }
 
@@ -71,7 +85,14 @@ public class UserService {
         User user = this.findUser(id);
 
         if (!user.isActive()) {
-            throw new UserAlreadyDeactivatedException(id);
+            throw new AlreadyDeactivatedException(User.class, id);
+        }
+
+        boolean hasActiveOffers = offerRepository.findAll().stream()
+                .anyMatch(offer -> offer.getClient().getId().equals(id) && offer.isActive());
+
+        if (hasActiveOffers) {
+            throw new EntityInUseException(User.class, id);
         }
 
         user.setActive(false);
@@ -85,7 +106,7 @@ public class UserService {
                 .orElseThrow(() -> new UserNotFoundException(id));
 
         if (user.isActive()) {
-            throw new UserAlreadyActiveException(id);
+            throw new AlreadyActiveException(User.class, id);
         }
 
         user.setActive(true);
