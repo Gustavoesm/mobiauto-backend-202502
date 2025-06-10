@@ -5,6 +5,9 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import com.gustavo.mobiauto_backend.model.user.User;
+import com.gustavo.mobiauto_backend.service.exceptions.DeactivatedUserException;
+
 @Service
 public class AuthService implements UserDetailsService {
 
@@ -16,7 +19,13 @@ public class AuthService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return this.userService.findByEmail(username);
+        User user = this.userService.findByEmail(username);
+
+        if (!user.isActive()) {
+            throw new DeactivatedUserException(user.getId());
+        }
+
+        return user;
     }
 
 }

@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
-import com.auth0.jwt.exceptions.JWTCreationException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.gustavo.mobiauto_backend.model.user.User;
 import com.gustavo.mobiauto_backend.service.exceptions.TokenGenerationException;
@@ -30,7 +29,7 @@ public class TokenService {
                     .withIssuedAt(now)
                     .withExpiresAt(twelveHoursFromNow)
                     .sign(Algorithm.HMAC256(secret));
-        } catch (JWTCreationException exception) {
+        } catch (Exception exception) {
             throw new TokenGenerationException(user, exception);
         }
     }
