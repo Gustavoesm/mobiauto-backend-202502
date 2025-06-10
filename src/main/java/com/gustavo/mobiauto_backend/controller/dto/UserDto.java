@@ -7,10 +7,12 @@ import lombok.Data;
 
 @Data
 public class UserDto {
+    private Long id;
     private String name;
     private String email;
 
-    private UserDto(String name, String email) {
+    private UserDto(Long id, String name, String email) {
+        this.id = id;
         this.name = name;
         this.email = email;
     }
@@ -19,6 +21,6 @@ public class UserDto {
         if (!user.isActive())
             throw new DeactivatedUserException(user.getId());
 
-        return new UserDto(user.getFullName(), user.getEmail().getValue());
+        return new UserDto(user.getId(), user.getFullName(), user.getEmail().getValue());
     }
 }

@@ -11,14 +11,16 @@ import com.gustavo.mobiauto_backend.service.exceptions.DeactivatedStoreException
 import lombok.Data;
 
 @Data
-@JsonPropertyOrder({ "name", "cnpj", "totalOffers", "offers" })
+@JsonPropertyOrder({ "id", "name", "cnpj", "totalOffers", "offers" })
 public class StoreDto {
+    private Long id;
     private String name;
     private String cnpj;
     private long totalOffers;
     private List<OfferDto> offers;
 
-    private StoreDto(String name, String cnpj, long offerCount, List<OfferDto> offers) {
+    private StoreDto(Long id, String name, String cnpj, long offerCount, List<OfferDto> offers) {
+        this.id = id;
         this.name = name;
         this.cnpj = Formatters.formatCnpj(cnpj);
         this.totalOffers = offerCount;
@@ -34,6 +36,7 @@ public class StoreDto {
                 .map(OfferDto::of)
                 .toList();
         return new StoreDto(
+                store.getId(),
                 store.getCompanyName().getValue(),
                 store.getCnpj().getValue(),
                 offers.size(), offers);

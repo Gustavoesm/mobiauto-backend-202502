@@ -9,13 +9,16 @@ import lombok.Data;
 
 @Data
 public class OfferDto {
+    private Long id;
     private OfferStatus status;
     private UserDto client;
     private VehicleDto vehicle;
     private String storeCnpj;
     private String storeName;
 
-    private OfferDto(OfferStatus status, UserDto client, VehicleDto vehicle, String storeCnpj, String storeName) {
+    private OfferDto(Long id, OfferStatus status, UserDto client, VehicleDto vehicle, String storeCnpj,
+            String storeName) {
+        this.id = id;
         this.status = status;
         this.client = client;
         this.vehicle = vehicle;
@@ -28,6 +31,7 @@ public class OfferDto {
             throw new DeactivatedOfferException(offer.getId());
 
         return new OfferDto(
+                offer.getId(),
                 offer.getStatus(),
                 UserDto.of(offer.getClient()),
                 VehicleDto.of(offer.getVehicle()),
